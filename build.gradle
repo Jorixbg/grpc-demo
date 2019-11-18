@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'com.google.protobuf' version '0.8.8'
+    id 'idea'
 }
 
 group 'com.grpc'
@@ -35,5 +36,14 @@ protobuf {
             grpc {}
         }
     }
+    def generatedJava = file("${protobuf.generatedFilesBaseDir}/main/java")
+    def generatedGrpc = file("${protobuf.generatedFilesBaseDir}/main/grpc")
 //    generatedFilesBaseDir = "$projectDir/src"
 }
+idea {
+    module {
+        sourceDirs += file("${projectDir}/src/build/generated/source/main/java");
+        sourceDirs += file("${projectDir}/src/build/generated/source/main/grpc");
+    }
+}
+
