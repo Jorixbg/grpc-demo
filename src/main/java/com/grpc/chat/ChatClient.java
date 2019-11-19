@@ -45,11 +45,18 @@ public class ChatClient extends Application {
 
         primaryStage.show();
 
+        // Setup connection channel
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9090).usePlaintext(true).build();
-        ChatServiceGrpc.ChatServiceStub chatService = ChatServiceGrpc.newStub(channel);
+        ChatServiceGrpc.ChatServiceStub chatService = ChatServiceGrpc.newStub(channel); // Can also be blocking stub for unary services.
+
+        /*
+            Opposite to the server, below is a listener, listening to messages from the server.
+         */
         StreamObserver<Chat.ChatMessage> chat = chatService.chat(new StreamObserver<Chat.ChatMessageFromServer>() {
             @Override
             public void onNext(Chat.ChatMessageFromServer value) {
+
+                // Below code displays newly received message in the UI.
                 Platform.runLater(() -> {
                     messages.add(value.getMessage().getFrom() + ": " + value.getMessage().getMessage());
                     messagesView.scrollTo(messages.size());
@@ -58,7 +65,7 @@ public class ChatClient extends Application {
 
             @Override
             public void onError(Throwable t) {
-                t.printStackTrace();
+                t.printStackTrace(); // Display exception
                 System.out.println("Disconnected");
             }
 
@@ -68,7 +75,12 @@ public class ChatClient extends Application {
             }
         });
 
+        /*
+            ChatService needs to return a StreamObserver.
+         */
         send.setOnAction(e -> {
+
+            // The onNext callback that the server is listening to.
             chat.onNext(Chat.ChatMessage.newBuilder().setFrom(name.getText()).setMessage(message.getText()).build());
             message.setText("");
         });
