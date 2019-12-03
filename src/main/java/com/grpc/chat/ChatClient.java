@@ -45,12 +45,18 @@ public class ChatClient extends Application {
 
         primaryStage.show();
 
-        // Setup connection channel
+        // Setup connection channel to server
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9090).usePlaintext(true).build();
-        ChatServiceGrpc.ChatServiceStub chatService = ChatServiceGrpc.newStub(channel); // Can also be blocking stub for unary services.
 
+        /* Stub uses the channel to send RPCs to the service.
+            Can also be blocking stub for synchronous (unary) services.
+            In this case no observers are returned, but ordinary responses
+         */
+
+        ChatServiceGrpc.ChatServiceStub chatService = ChatServiceGrpc.newStub(channel);
         /*
             Opposite to the server, below is a listener, listening to messages from the server.
+            Parameter listens to server, type responds to server.
          */
         StreamObserver<Chat.ChatMessage> chat = chatService.chat(new StreamObserver<Chat.ChatMessageFromServer>() {
             @Override
