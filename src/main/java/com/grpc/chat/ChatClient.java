@@ -45,6 +45,8 @@ public class ChatClient extends Application {
 
         primaryStage.show();
 
+        // --- INTERESTING STUFF --- //
+
         // Setup connection channel to server
         ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9090).usePlaintext(true).build();
 
@@ -60,7 +62,7 @@ public class ChatClient extends Application {
          */
         StreamObserver<Chat.ChatMessage> chat = chatService.chat(new StreamObserver<Chat.ChatMessageFromServer>() {
             @Override
-            public void onNext(Chat.ChatMessageFromServer value) {
+            public void onNext(Chat.ChatMessageFromServer value) { // Listens to server's onNext
 
                 // Below code displays newly received message in the UI.
                 Platform.runLater(() -> {
@@ -76,7 +78,7 @@ public class ChatClient extends Application {
             }
 
             @Override
-            public void onCompleted() {
+            public void onCompleted() { // Means the server has disconnected that client
                 System.out.println("Disconnected");
             }
         });
