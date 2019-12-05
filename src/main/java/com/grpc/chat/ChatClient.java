@@ -60,7 +60,7 @@ public class ChatClient extends Application {
             Opposite to the server, below is a listener, listening to messages from the server.
             Parameter listens to server, type responds to server.
          */
-        StreamObserver<Chat.ChatMessage> chat = chatService.chat(new StreamObserver<Chat.ChatMessageFromServer>() {
+        StreamObserver<Chat.ChatMessage> chatClient = chatService.chat(new StreamObserver<Chat.ChatMessageFromServer>() {
             @Override
             public void onNext(Chat.ChatMessageFromServer value) { // Listens to server's onNext
 
@@ -89,9 +89,9 @@ public class ChatClient extends Application {
         send.setOnAction(e -> {
 
             // The onNext callback that the server is listening to.
-            chat.onNext(Chat.ChatMessage.newBuilder().setFrom(name.getText()).setMessage(message.getText()).build());
+            chatClient.onNext(Chat.ChatMessage.newBuilder().setFrom(name.getText()).setMessage(message.getText()).build());
             message.setText("");
         });
-        primaryStage.setOnCloseRequest(e -> {chat.onCompleted(); channel.shutdown(); });
+        primaryStage.setOnCloseRequest(e -> {chatClient.onCompleted(); channel.shutdown(); });
     }
 }
