@@ -48,7 +48,8 @@ public class ChatClient extends Application {
         // --- INTERESTING STUFF --- //
 
         // Setup connection channel to server
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9090).usePlaintext(true).build();
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9090)
+                .usePlaintext(true).build();
 
         /* Stub uses the channel to send RPCs to the service.
             Can also be blocking stub for synchronous (unary) services.
@@ -60,9 +61,9 @@ public class ChatClient extends Application {
             Opposite to the server, below is a listener, listening to messages from the server.
             Parameter listens to server, type responds to server.
          */
-        StreamObserver<Chat.ChatMessage> chatClient = chatService.chat(new StreamObserver<Chat.ChatMessageFromServer>() {
+        StreamObserver<ChatMessage> chatClient = chatService.chat(new StreamObserver<ChatMessageFromServer>() {
             @Override
-            public void onNext(Chat.ChatMessageFromServer value) { // Listens to server's onNext
+            public void onNext(ChatMessageFromServer value) { // Listens to server's onNext
 
                 // Below code displays newly received message in the UI.
                 Platform.runLater(() -> {
@@ -89,7 +90,7 @@ public class ChatClient extends Application {
         send.setOnAction(e -> {
 
             // The onNext callback that the server is listening to.
-            chatClient.onNext(Chat.ChatMessage.newBuilder().setFrom(name.getText()).setMessage(message.getText()).build());
+            chatClient.onNext(ChatMessage.newBuilder().setFrom(name.getText()).setMessage(message.getText()).build());
             message.setText("");
         });
         primaryStage.setOnCloseRequest(e -> {chatClient.onCompleted(); channel.shutdown(); });

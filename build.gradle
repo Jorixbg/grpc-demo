@@ -36,14 +36,14 @@ protobuf {
             grpc {}
         }
     }
-    def generatedJava = file("${protobuf.generatedFilesBaseDir}/main/java")
-    def generatedGrpc = file("${protobuf.generatedFilesBaseDir}/main/grpc")
-//    generatedFilesBaseDir = "$projectDir/src"
 }
+
+sourceSets.main.java.srcDir new File(buildDir, 'generated/source')
 idea {
     module {
-        sourceDirs += file("${projectDir}/src/build/generated/source/main/java");
-        sourceDirs += file("${projectDir}/src/build/generated/source/main/grpc");
+        // Marks the already(!) added srcDir as "generated"
+        generatedSourceDirs += file('build/generated/source')
     }
 }
+
 
