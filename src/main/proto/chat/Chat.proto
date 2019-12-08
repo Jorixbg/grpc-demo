@@ -15,7 +15,7 @@ message ChatMessage {
     string message = 2;
     int32 size = 3;
     bytes image = 4;
-    repeated string recievers = 5;
+    repeated string receivers = 5;
     map<string, string> metadata = 6;
     SupportedAttachments attachments = 7;
 
