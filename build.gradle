@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    // GRPC
+    // GRPC dependencies
     implementation 'io.grpc:grpc-netty-shaded:1.25.0'
     implementation 'io.grpc:grpc-protobuf:1.25.0'
     implementation 'io.grpc:grpc-stub:1.25.0'
@@ -22,6 +22,8 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
+//build block defining what operating system you are using and download the actual proto C compiler for you OS
+//it will hook up to the gradle task and will generate the stubs for you
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:3.10.0"

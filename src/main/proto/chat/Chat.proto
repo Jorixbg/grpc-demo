@@ -1,8 +1,9 @@
 syntax = "proto3";
-
+//in order to generate the IDL into stubs there is proto gen compiler that takes option
 option java_multiple_files = true;
-
+//we can import other proto files like importing packages in java
 import "google/protobuf/timestamp.proto";
+//the package where the classes will be generated
 package com.grpc.chat;
 
 enum SupportedAttachments{
@@ -10,6 +11,7 @@ enum SupportedAttachments{
     PNG = 1;
     ZIP = 3;
 }
+//depending on the language the ChatMessage will be generated in it
 message ChatMessage {
     string from = 1;
     string message = 2;
@@ -18,8 +20,9 @@ message ChatMessage {
     repeated string receivers = 5;
     map<string, string> metadata = 6;
     SupportedAttachments attachments = 7;
-
-    }
+//the number are tags which are binary representation of this field in the payload
+//if the num < 16 it will take a byte and if > it will expand
+}
 
 message ChatMessageFromServer {
     google.protobuf.Timestamp timestamp = 1;
@@ -27,5 +30,6 @@ message ChatMessageFromServer {
 }
 
 service ChatService {
+    //bi- directional streaming ()
     rpc chat(stream ChatMessage) returns (stream ChatMessageFromServer);
 }
